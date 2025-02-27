@@ -1,50 +1,52 @@
-//import java.io.FileInputStream;
+import java.io.FileInputStream;
 import java.util.Scanner;
-
+ 
 public class Solution {
-    public static void main(String[] args) throws Exception {
-//        System.setIn(new FileInputStream("res/input.txt"));
+    
+    //                0: 우, 1: 하, 2: 좌, 3: 상 
+    static int[] dr = {0, 1, 0, -1};
+    static int[] dc = {1, 0, -1, 0};
+    
+    
+    public static void main(String[] args) throws Exception{
+    	//System.setIn(new FileInputStream("res/input.txt"));
         Scanner sc = new Scanner(System.in);
+        
         int T = sc.nextInt();
-
-        for (int tc = 1; tc <= T; tc++) {
+        
+        for (int test_case = 1; test_case <= T; test_case++) {
+            
             int N = sc.nextInt();
-            int[][] arr = new int[N][N];
-
-            int d = 1;
-            int K = N;
+            int[][] board = new int[N][N];
+            
             int row = 0;
-            int col = -1;
+            int col = 0;
             int num = 1;
-
-            while (K > 0) {
-                // 수평 이동
-                int i = 0;
-                while (i < K) {
-                    col += d;
-                    arr[row][col] = num++;
-                    i++;
+            int d = 0;
+            
+            while (num <= N * N) {
+                board[row][col] = num++;
+                
+                int nr = row + dr[d]; 
+                int nc = col + dc[d];
+                
+                // 배열 범위를 벗어나거나
+                // 이미 숫자가 적힌 칸에 가게되면
+                // 방향을 꺾는다
+                if (!(0 <= nr && nr < N && 0 <= nc && nc < N) || board[nr][nc] > 0) {
+                    d = (d + 1) % 4;
+                    nr = row + dr[d]; 
+                    nc = col + dc[d];
                 }
-                K--;
-
-                if (K == 0) break; // K가 0이면 종료
-
-                // 수직 이동
-                i = 0;
-                while (i < K) {
-                    row += d;
-                    arr[row][col] = num++;
-                    i++;
-                }
-
-                // 방향 전환
-                d *= -1;
+                
+                row = nr;
+                col = nc;
             }
 
-            System.out.println("#" + tc);
-            for (int i = 0; i < N; i++) {
-                for (int j = 0; j < N; j++) {
-                    System.out.print(arr[i][j] + " ");
+            System.out.println("#" + test_case);
+            for (int r = 0; r < N; r++) {
+                for (int c = 0; c < N; c++) {
+                    System.out.print(board[r][c] + " ");
                 }
                 System.out.println();
             }
