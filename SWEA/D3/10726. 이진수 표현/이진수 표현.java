@@ -9,25 +9,14 @@ class Solution {
 			System.out.print("#" + test_case + " ");
 			int N = sc.nextInt();
 			int M = sc.nextInt();
-			int[] arr = new int[N];
-			for (int i = 0; i < N; i++) {
-				arr[i] = (M % 2);
-				M /= 2;
-			}
-//			System.out.println(Arrays.toString(arr));
-			int sum = 0;
-			for (int i = 0; i < N; i++) {
-				if (arr[i] == 1) {
-					sum += 1;
-				}
-			}
 			
-			if (sum == N) {
+			if ((M & ((1 << N) - 1)) == (1 << N) - 1) {
 				System.out.print("ON");
 			} else {
 				System.out.print("OFF");
 			}
 			System.out.println();
 		}
+		sc.close();
 	}
 }
