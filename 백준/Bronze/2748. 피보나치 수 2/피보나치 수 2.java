@@ -1,12 +1,14 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
 
 	static long[] arr;
 
 	public static void main(String[] args) throws Exception {
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int n = Integer.parseInt(br.readLine());
+		
 		arr = new long[n + 1];
 		for (int i = 0; i <= n; i++) {
 			arr[i] = -1;
