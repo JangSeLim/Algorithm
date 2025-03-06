@@ -1,4 +1,4 @@
-// 로무토 파티션
+// 호어 파티션
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
@@ -24,30 +24,38 @@ class Solution {
  
     static void quickSort(int start, int end) {
         if (start < end) {
-            int pivot = lomutoPart(start, end);
+            int pivot = hoarePart(start, end);
             quickSort(start, pivot - 1);
             quickSort(pivot + 1, end);
         }
     }
  
-    static int lomutoPart(int start, int end) {
-        int pivot = arr[end];
-        int i = start - 1;
+    static int hoarePart(int start, int end) {
+        int pivot = arr[start];
+        int L = start+1;
+        int R = end;
  
-        for (int j = start; j < end; j++) {
-            if (arr[j] <= pivot) {
-                i++;
-                int tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-            }
-        } // 경계
- 
-        int tmp = arr[i + 1];
-        arr[i + 1] = arr[end];
-        arr[end] = tmp;
- 
-        return i + 1;
+        while(L <= R) {
+        	// L: 피벗보다 큰 값
+        	while(L <= R && arr[L] <= pivot) L++;
+        	
+        	// R: 피벗보다 작거나 같은 값
+        	while (arr[R] > pivot) R--;
+        	
+        	// 스왑
+        	if (L < R) {
+        		int tmp = arr[L];
+        		arr[L] = arr[R];
+        		arr[R] = tmp;
+        	}
+        }
+        
+        // R과 피벗 위치 교환
+        int tmp = arr[start];
+        arr[start] = arr[R];
+        arr[R] = tmp;
+        
+        return R;
     }
  
 }
