@@ -1,26 +1,25 @@
+
 import java.util.Scanner;
- 
-public class Solution {
-    
-    public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
-                
-        for (int test_case = 1; test_case <= 10; test_case++) {
-        	int tc = sc.nextInt();        	
-        	int N = sc.nextInt();
-        	int M = sc.nextInt();
 
-           
-            
-            System.out.println("#" + tc + " " + power(N,M));
+class Solution {
+	public static void main(String args[]) throws Exception {
 
-        }
-    }
-    static int power(int N, int M) {
-    	if (M == 1) {
-    		return N;
-    	}
-    	
-    	return N * power(N, M-1);
-    }
+
+		Scanner sc = new Scanner(System.in);
+
+		for (int test_case = 1; test_case <= 10; test_case++) {
+			int T = sc.nextInt();
+			int N = sc.nextInt();
+			int M = sc.nextInt();
+			
+			
+			System.out.println("#" + T + " " + recur(N, M));
+		}
+		sc.close();
+	}
+	
+	static int recur(int N, int M) {
+		if (M == 0) return 1;
+		return N * recur(N, M-1);
+	}
 }
