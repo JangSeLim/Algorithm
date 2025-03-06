@@ -1,4 +1,4 @@
-// 로무토 파티션
+// 로무토 파티션, 500000까지만 돌리기
 import java.util.Scanner;
 
 class Solution {
@@ -15,17 +15,31 @@ class Solution {
 			arr[i] = sc.nextInt();
 		}
 
-		quickSort(0, N - 1);
-        
-		System.out.println(arr[500000]);
+		int result = quickSort(0, N - 1, 500000);
+
+		System.out.println(result);
 	}
 
-	static void quickSort(int start, int end) {
-		if (start < end) {
+	static int quickSort(int start, int end, int k) {
+		if (start <= end) {
 			int pivot = lomutoPart(start, end);
-			quickSort(start, pivot - 1);
-			quickSort(pivot + 1, end);
+
+			// k번째 값이 pivot에 해당하면 그 값을 반환
+			if (pivot == k) {
+				return arr[pivot];
+			}
+
+			// k번째 값이 pivot보다 왼쪽에 있으면 왼쪽 부분을 재귀 호출
+			else if (pivot > k) {
+				return quickSort(start, pivot - 1, k);
+			}
+
+			// k번째 값이 pivot보다 오른쪽에 있으면 오른쪽 부분을 재귀 호출
+			else {
+				return quickSort(pivot + 1, end, k);
+			}
 		}
+		return -1;
 	}
 
 	static int lomutoPart(int start, int end) {
