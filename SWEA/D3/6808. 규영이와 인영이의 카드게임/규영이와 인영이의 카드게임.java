@@ -13,20 +13,20 @@ class Solution {
 	public static void main(String args[]) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		
+
 		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
-			
+
 			N = 9;
 			kyoung = new int[N];
 			cards = new int[N];
 			iyoung = new int[N];
-			
+
 			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < N; i++) {
 				kyoung[i] = Integer.parseInt(st.nextToken());
 			} // 규영이의 고정된 카드
-			
+
 			boolean[] isExcluded = new boolean[19];
 			for (int i = 0; i < N; i++) {
 				isExcluded[kyoung[i]] = true;
@@ -41,34 +41,31 @@ class Solution {
 //			System.out.println(Arrays.toString(kyoung));
 //			System.out.println(Arrays.toString(cards));
 //			System.out.println();
-			
+
 			win = 0;
 			lose = 0;
-			perm(0);
+			// 비트마스크 이용
+			perm(0, 0);
 			System.out.println("#" + tc + " " + win + " " + lose);
 
-			
 		} // 테스트케이스
 
 	} // main
-	
-	// 인영이 카드팩 순열 구하는 함수
-	static void perm(int idx) {
+
+	// 인영이 카드팩 순열 구하는 함수 : 비트마스크 활용
+	static void perm(int idx, int used) {
 		if (idx == N) {
 			round();
 			return;
 		}
-		
+
 		for (int i = 0; i < N; i++) {
-			if (iyoung[i] != 0) continue;
-			
-			iyoung[i] = cards[idx];
-			perm(idx + 1);
-			iyoung[i] = 0; 
-			
+			if ((used & (1 << i)) != 0)continue;
+			iyoung[idx] = cards[i];
+			perm(idx + 1, used | (1 << i));
 		}
 	}
-	
+
 	// 규영 카드 vs 인영 카드
 	static void round() {
 		int kwin = 0;
@@ -81,14 +78,14 @@ class Solution {
 				iwin += (kyoung[i] + iyoung[i]);
 			}
 		}
-		
+
 		if (kwin > iwin) {
 			win++;
 		} else if (kwin < iwin) {
 			lose++;
 		}
 	}
-	
+
 }
 // 1. 순열로 카드 배열 구하기
 // 2. 카드 배열 나오면, 규영이와 각 라운드 비교하고 합산 구하기. 
