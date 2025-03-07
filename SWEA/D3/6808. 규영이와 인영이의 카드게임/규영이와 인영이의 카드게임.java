@@ -4,7 +4,6 @@ class Solution {
 	static int[] kyoung; // 규영이의 고정된 카드
 	static int[] cards; // 인영이의 카드 팩
 	static int[] iyoung; // 인영이의 고정된 카드(순열)
-	static boolean[] visited;
 	static int N;
 	static int win;
 	static int lose;
@@ -17,22 +16,19 @@ class Solution {
 			N = 9;
 			kyoung = new int[N];
 			cards = new int[N];
+			iyoung = new int[N];
 			
 			for (int i = 0; i < N; i++) {
 				kyoung[i] = sc.nextInt();
 			} // 규영이의 고정된 카드
 			
-			boolean isExcluded;
+			boolean[] isExcluded = new boolean[19];
+			for (int i = 0; i < N; i++) {
+				isExcluded[kyoung[i]] = true;
+			}
 			int idx = 0;
 			for (int i = 1; i <= 18; i++) {
-				isExcluded = false;
-				for (int card : kyoung) {
-					if (i == card) {
-						isExcluded = true;
-						break;
-					}
-				}
-				if (!isExcluded) {
+				if (!isExcluded[i]) {
 					cards[idx++] = i;
 				}
 			} // 인영이 카드 팩
@@ -41,8 +37,6 @@ class Solution {
 //			System.out.println(Arrays.toString(cards));
 //			System.out.println();
 			
-			iyoung = new int[N];
-			visited = new boolean[N];
 			win = 0;
 			lose = 0;
 			perm(0);
@@ -56,34 +50,29 @@ class Solution {
 	// 인영이 카드팩 순열 구하는 함수
 	static void perm(int idx) {
 		if (idx == N) {
-			round(kyoung, iyoung);
+			round();
 			return;
 		}
 		
 		for (int i = 0; i < N; i++) {
-			if (visited[i]) continue;
+			if (iyoung[i] != 0) continue;
 			
-			iyoung[idx] = cards[i];
-			visited[i] = true;
-			
+			iyoung[i] = cards[idx];
 			perm(idx + 1);
-			
-			visited[i] = false;
+			iyoung[i] = 0; 
 			
 		}
 	}
 	
 	// 규영 카드 vs 인영 카드
-	static void round(int[] kyoung, int[] iyoung) {
+	static void round() {
 		int kwin = 0;
 		int iwin = 0;
 
 		for (int i = 0; i < N; i++) {
-			if (kyoung[i] == iyoung[i]) {
-				continue;
-			} else if (kyoung[i] > iyoung[i]) {
+			if (kyoung[i] > iyoung[i]) {
 				kwin += (kyoung[i] + iyoung[i]);
-			} else {
+			} else if (kyoung[i] < iyoung[i]) {
 				iwin += (kyoung[i] + iyoung[i]);
 			}
 		}
