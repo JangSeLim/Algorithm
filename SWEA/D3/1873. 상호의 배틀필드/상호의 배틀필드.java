@@ -1,69 +1,61 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 class Solution {
-	static int H;
-	static int W;
+	static int H, W, r, c;
 	static char[][] map;
-	static int r;
-	static int c;
+	static final int[] dr = { -1, 1, 0, 0 };
+	static final int[] dc = { 0, 0, -1, 1 };
+	static final char[] dirChar = { '^', 'v', '<', '>' };
 
 	public static void main(String args[]) throws Exception {
-		Scanner sc = new Scanner(System.in);
-
-		int T = sc.nextInt();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
-			H = sc.nextInt(); // 높이
-			W = sc.nextInt(); // 너비
-
-			// 현재위치
-			r = -1;
-			c = -1;
+			String[] hw = br.readLine().split(" ");
+			H = Integer.parseInt(hw[0]);
+			W = Integer.parseInt(hw[1]);
 
 			map = new char[H][W];
 			for (int i = 0; i < H; i++) {
-				String str = sc.next();
+				String str = br.readLine();
 				for (int j = 0; j < W; j++) {
 					map[i][j] = str.charAt(j);
 					// 현재위치 저장
-					if (map[i][j] == '^' || map[i][j] == 'v' || map[i][j] == '<' || map[i][j] == '>') {
+					if ("^v<>".contains(String.valueOf(map[i][j]))) {
 						r = i;
 						c = j;
 					}
 				}
 			} // 2차원 배열 map
 
-			int N = sc.nextInt(); // 명령 개수
-			char[] command = sc.next().toCharArray(); // 명령어 배열
+			int N = Integer.parseInt(br.readLine());
+			char[] command = br.readLine().toCharArray(); // 명령어 배열
 
-//			// 출력 확인 (디버깅)
-//			System.out.println("#" + tc + " ");
-//			for (int i = 0; i < H; i++) {
-//				for (int j = 0; j < W; j++) {
-//					System.out.print(map[i][j] + " ");
-//				}
-//				System.out.println();
-//			}
-//			System.out.println(Arrays.toString(command));
-//			System.out.println(r + " " + c);
-//
-            for (char cmd : command) {
-                execute(cmd);
-//                // 출력 확인
-//                for (int i = 0; i < H; i++) {
-//                    System.out.println(new String(map[i]));
-//                }
-//                System.out.println("명령어 " + cmd);
-//                System.out.println();
-            }
-            
-			// 출력 확인
-			System.out.print("#" + tc + " ");
-			for (int i = 0; i < H; i++) {
-				for (int j = 0; j < W; j++) {
-					System.out.print(map[i][j]);
-				}
-				System.out.println();
+			for (char cmd : command) {
+				execute(cmd);
 			}
+
+			// 출력
+			StringBuilder sb = new StringBuilder();
+			sb.append("#").append(tc).append(" ");
+			for (int i = 0; i < H; i++) {
+                for (int j = 0; j < W; j++) {
+                    sb.append(map[i][j]);
+                }
+                sb.append("\n");  // 각 행 뒤에 줄바꿈 추가
+            }
+            System.out.print(sb.toString());
+			
+//            // 출력 
+//            System.out.print("#" + tc + " ");
+//            for (int i = 0; i < H; i++) {
+//                for (int j = 0; j < W; j++) {
+//                    System.out.print(map[i][j]);
+//                }
+//                System.out.println(); // 각 행의 끝에 줄바꿈
+//            }
 
 		} // 테스트케이스
 
@@ -71,68 +63,41 @@ class Solution {
 
 	// U, D, L, R
 	static void execute(char cmd) {
-		int nr = r;
-		int nc = c;
-
-		if (cmd == 'U') {
-			map[r][c] = '^';
-			nr = r - 1;
-		} else if (cmd == 'D') {
-			map[r][c] = 'v';
-			nr = r + 1;
-		} else if (cmd == 'L') {
-			map[r][c] = '<';
-			nc = c - 1;
-		} else if (cmd == 'R') {
-			map[r][c] = '>';
-			nc = c + 1;
-		}
-
-		if (cmd == 'U' || cmd == 'D' || cmd == 'L' || cmd == 'R') {
-			if (nr >= 0 && nr < H && nc >= 0 && nc < W && map[nr][nc] == '.') {
+		int d = "UDLR".indexOf(cmd);
+		if (d != -1) {
+			map[r][c] = dirChar[d];
+			int nr = r + dr[d];
+			int nc = c + dc[d];
+			
+			if (isInBound(nr, nc) && map[nr][nc] == '.') {
 				map[nr][nc] = map[r][c];
 				map[r][c] = '.';
 				r = nr;
 				c = nc;
 			}
-		}
-
-		if (cmd == 'S') {
+		} else if (cmd == 'S') {
 			shoot();
 		}
 	}
 
 	// shoot 함수
 	static void shoot() {
-		int sr = r;
-		int sc = c;
-		int dr = 0;
-		int dc = 0;
-
-		if (map[r][c] == '^')
-			dr = -1;
-		if (map[r][c] == 'v')
-			dr = 1;
-		if (map[r][c] == '<')
-			dc = -1;
-		if (map[r][c] == '>')
-			dc = 1;
+		int d = "^v<>".indexOf(map[r][c]);
+		int sr = r, sc = c;
 
 		while (true) {
-			sr += dr;
-			sc += dc;
+			sr += dr[d];
+			sc += dc[d];
 
-			if (sr < 0 || sr >= H || sc < 0 || sc >= W)
-				break;
-			if (map[sr][sc] == '#')
-				break;
-			if (map[sr][sc] == '*') {
+			if (!isInBound(sr, sc) || map[sr][sc] == '#') break;
+			if (map[sr][sc]=='*') {
 				map[sr][sc] = '.';
 				break;
 			}
 		}
-
 	}
-
+	
+	static boolean isInBound(int x, int y) {
+		return x >= 0 && x < H && y >= 0 && y < W;
+	}
 }
-// 
