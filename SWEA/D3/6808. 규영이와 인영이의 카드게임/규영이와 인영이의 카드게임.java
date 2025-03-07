@@ -1,4 +1,6 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 class Solution {
 	static int[] kyoung; // 규영이의 고정된 카드
@@ -9,8 +11,10 @@ class Solution {
 	static int lose;
 
 	public static void main(String args[]) throws Exception {
-		Scanner sc = new Scanner(System.in);
-		int T = sc.nextInt();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
+		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
 			
 			N = 9;
@@ -18,8 +22,9 @@ class Solution {
 			cards = new int[N];
 			iyoung = new int[N];
 			
+			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < N; i++) {
-				kyoung[i] = sc.nextInt();
+				kyoung[i] = Integer.parseInt(st.nextToken());
 			} // 규영이의 고정된 카드
 			
 			boolean[] isExcluded = new boolean[19];
