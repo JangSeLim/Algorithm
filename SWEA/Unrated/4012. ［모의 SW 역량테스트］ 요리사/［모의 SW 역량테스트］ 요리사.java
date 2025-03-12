@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-class Solution {
+public class Solution {
     static int[][] board;
     static int N;
     static List<Integer> A;
