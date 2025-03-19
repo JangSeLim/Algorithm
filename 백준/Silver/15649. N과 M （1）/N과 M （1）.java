@@ -1,40 +1,39 @@
 import java.util.Scanner;
- 
+
 public class Main {
- 
-	static int[] arr;
-	static boolean[] visit;
- 
-	public static void main(String[] args) {
- 
-		Scanner in = new Scanner(System.in);
- 
-		int N = in.nextInt();
-		int M = in.nextInt();
- 
-		arr = new int[M];
-		visit = new boolean[N];
-		dfs(N, M, 0);
- 
+	static int N, M;
+	static int[] nums;
+	static boolean[] visited;
+	static StringBuilder sb = new StringBuilder();
+	
+	public static void main(String[] args) throws Exception {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		M = sc.nextInt();
+		nums = new int[M];
+		visited = new boolean[N+1];
+		
+		recur(0);
+		System.out.println(sb);
 	}
- 
-	static void dfs(int N, int M, int depth) {
-		if (depth == M) {
-			for (int val : arr) {
-				System.out.print(val + " ");
+	
+	static void recur(int idx) {
+		if (idx == M) {
+			for (int n : nums) {
+				sb.append(n).append(" ");
 			}
-			System.out.println();
+			sb.append("\n");
 			return;
 		}
- 
-		for (int i = 0; i < N; i++) {
-			if (!visit[i]) {
-				visit[i] = true;
-				arr[depth] = i + 1;
-				dfs(N, M, depth + 1);
-				visit[i] = false;
+		
+		for (int i = 1 ; i <= N; i++) {
+			if (!visited[i]) {
+				visited[i] = true;
+				nums[idx] = i;
+				recur(idx+1);
+				visited[i] = false;
 			}
 		}
 	}
- 
+	
 }
