@@ -1,37 +1,32 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 	static int N, M;
+	static int[] nums;
 	static StringBuilder sb = new StringBuilder();
-
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
 		N = sc.nextInt();
 		M = sc.nextInt();
-
-		ArrayList<Integer> list = new ArrayList<>();
-		recur(list, 0);
+		nums = new int[M];
+		
+		recur(0);
 		System.out.println(sb);
 	}
-
-	static void recur(ArrayList<Integer> list, int index) {
-		// M개의 숫자를 모두 선택한 경우
-		if (index == M) {
-			// 현재 선택한 숫자 출력
-			for (int num : list) {
-				sb.append(num).append(" ");
+	
+	static void recur(int idx) {
+		if (idx == M) {
+			for (int n : nums) {
+				sb.append(n).append(" ");
 			}
 			sb.append("\n");
-			return; // 재귀 종료
+			return;
 		}
-
-		// 1부터 N까지 숫자를 하나씩 선택
-		for (int i = 1; i <= N; i++) {
-			list.add(i);
-			recur(list, index + 1);
-			list.remove(list.size() - 1);
+		
+		for (int i = 1 ; i <= N; i++) {
+				nums[idx] = i;
+				recur(idx+1);
 		}
 	}
 }
-// 중복순열
