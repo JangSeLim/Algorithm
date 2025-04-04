@@ -3,7 +3,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -35,7 +38,7 @@ public class Main {
 		int cnt = 0;
 		for (int i = 1; i <= N; i++) {
 			if (!visited[i]) {
-				dfs(i);
+				bfs(i);
 				cnt++;
 			}
 		}
@@ -43,11 +46,36 @@ public class Main {
 	} // main
 
 	static void dfs(int start) {
+		Stack<Integer> stack = new Stack<>();
+		stack.add(start);
 		visited[start] = true;
 		
-		for (int next : graph[start]) {
-			if (!visited[next])
-				dfs(next);
+		while(!stack.isEmpty()) {
+			int curr = stack.pop();
+			
+			for (int i = graph[curr].size() - 1; i >= 0; i--) {
+				int next = graph[curr].get(i);
+				if (!visited[next]) {
+					stack.push(next);
+				}
+			}
+		}
+	}
+	
+	static void bfs(int start) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(start);
+		visited[start] = true;
+		
+		while(!queue.isEmpty()) {
+			int curr = queue.poll();
+			
+			for (int next : graph[curr]) {
+				if (!visited[next]) {
+					queue.add(next);
+					visited[next] = true;
+				}
+			}
 		}
 	}
 
