@@ -1,42 +1,45 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Solution {
-    static int N, K;
-    static int[] arr;
-    static int count;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int T = sc.nextInt(); // 테스트 케이스 개수
+	static int N, K, cnt;
+	static int[] arr;
 
-        for (int t = 1; t <= T; t++) {
-            N = sc.nextInt(); // 배열 크기
-            K = sc.nextInt(); // 목표 합
-            arr = new int[N];
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		for (int tc = 1; tc <= T; tc++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			K = Integer.parseInt(st.nextToken());
+			arr = new int[N];
+			st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < N; i++) {
+				arr[i] = Integer.parseInt(st.nextToken());
+			}
 
-            for (int i = 0; i < N; i++) {
-                arr[i] = sc.nextInt();
-            }
+			cnt = 0;
+			findSubset(0, 0);
 
-            count = 0;
-            findSubsets(0, 0);
+			System.out.println("#" + tc + " " + cnt);
+		} // tc
+	} // main
 
-            System.out.println("#" + t + " " + count);
-        }
-        sc.close();
-    }
+	static void findSubset(int idx, int sum) {
+		if (idx == N) {
+			return;
+		}
 
-    static void findSubsets(int idx, int sum) {
-        if (idx == N) {
-            return;
-        }
+		// 현재 요소를 선택하는 경우
+		if (sum + arr[idx] == K) {
+			cnt++;
+		}
 
-        // 현재 요소 선택하는 경우
-        if (sum + arr[idx] == K) {
-            count++;
-        }
-        findSubsets(idx + 1, sum + arr[idx]); // 포함하는 경우
-        findSubsets(idx + 1, sum); // 포함하지 않는 경우
-    }
+		findSubset(idx + 1, sum + arr[idx]);
+		findSubset(idx + 1, sum);
+
+	}
 
 }
