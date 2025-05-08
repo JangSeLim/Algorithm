@@ -1,10 +1,7 @@
-// BFS
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -25,38 +22,25 @@ public class Main {
 			}
 		}
 		
-		for (int i = 0; i < N; i++) {
-			bfs(i);
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for (int[] row : result) {
-			for (int x: row) {
-				sb.append(x).append(" ");
-			}
-			sb.append("\n");
-		}
-		System.out.println(sb);
-		
-	} // main
-	
-	static void bfs(int start) {
-		boolean[] visited = new boolean[N];
-		Queue<Integer> queue = new LinkedList<>();
-		queue.offer(start);
-		
-		while(!queue.isEmpty()) {
-			int curr = queue.poll();
-			
-			for (int next = 0; next < N; next++) {
-				if (graph[curr][next] == 1 && !visited[next]) {
-					visited[next] = true;
-					result[start][next] = 1;
-					queue.offer(next);
+		// 플로이드 워셜
+		for (int k = 0; k < N; k++) { // 거쳐가는 정점
+			for (int i = 0; i < N; i++) { // 출발 정점
+				for (int j = 0 ; j < N; j++) { // 도착 정점
+					if (graph[i][k] == 1 && graph[k][j] == 1) {
+						graph[i][j] = 1;
+					}
 				}
 			}
 		}
-	}
-	
+		
+		// 결과 출력
+        StringBuilder sb = new StringBuilder();
+        for (int[] row : graph) {
+            for (int x : row) sb.append(x).append(" ");
+            sb.append("\n");
+        }
+        System.out.print(sb);
+		
+	} // main
 	
 }
