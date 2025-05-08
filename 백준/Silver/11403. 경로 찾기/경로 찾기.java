@@ -1,8 +1,10 @@
-// DFS
+// BFS
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -24,26 +26,37 @@ public class Main {
 		}
 		
 		for (int i = 0; i < N; i++) {
-			boolean[] visited = new boolean[N];
-			dfs(i, visited);
-			for (int j = 0; j < N; j++) {
-				if (visited[j]) result[i][j] = 1;
-			}
+			bfs(i);
 		}
 		
+		StringBuilder sb = new StringBuilder();
 		for (int[] row : result) {
-			for (int x : row) System.out.print(x + " ");
-			System.out.println();
+			for (int x: row) {
+				sb.append(x).append(" ");
+			}
+			sb.append("\n");
 		}
+		System.out.println(sb);
 		
 	} // main
 	
-	static void dfs(int start, boolean[] visited) {
-		for (int i = 0; i < N; i++) {
-			if (graph[start][i] == 1 && !visited[i]) {
-				visited[i] = true;
-				dfs(i, visited);
+	static void bfs(int start) {
+		boolean[] visited = new boolean[N];
+		Queue<Integer> queue = new LinkedList<>();
+		queue.offer(start);
+		
+		while(!queue.isEmpty()) {
+			int curr = queue.poll();
+			
+			for (int next = 0; next < N; next++) {
+				if (graph[curr][next] == 1 && !visited[next]) {
+					visited[next] = true;
+					result[start][next] = 1;
+					queue.offer(next);
+				}
 			}
 		}
 	}
+	
+	
 }
